@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "assignment3"
+version = "0.1.0"
+description = ""
+authors = ["Gopi Krishna <gopigof@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+
+[tool.poetry.dependencies]
+python = "^3.12"
+langgraph = "^0.2.45"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
