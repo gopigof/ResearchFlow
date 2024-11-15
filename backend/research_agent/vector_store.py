@@ -1,24 +1,29 @@
-from typing import List, Optional
 from langchain_openai import OpenAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_pinecone import PineconeVectorStore
+
+from llama_index.core import VectorStoreIndex
+from llama_index.core.indices.vector_store import VectorIndexRetriever
+from llama_index.vector_stores.pinecone import PineconeVectorStore
 from pinecone import Pinecone
 
 from backend.config import settings
 
-
+# Use llama-index to retrieve docs as they were indexed using same strategy
 def get_pinecone_vector_store():
-    embeddings = OpenAIEmbeddings(model=settings.OPENAI_EMBEDDINGS_MODEL)
+    embeddings = OpenAIEmbeddings(model=settings.OPENAI_EMBEDDINGS_MODEL, api_key=settings.OPENAI_API_KEY)
     pinecone_client = Pinecone(api_key=settings.PINECONE_API_KEY)
     pinecone_index = pinecone_client.Index(settings.PINECONE_INDEX_NAME)
-    return PineconeVectorStore(index=pinecone_index, embedding=embeddings, namespace="")
+    vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
+    vector_index = VectorStoreIndex.from_vector_store(vector_store=vector_store, embed_model=embeddings)
+
+    return vector_index
 
 class Retriever:
     def __init__(self, vector_store):
-        self.vector_store = vector_store
+        self.vector_store = VectorIndexRetriever(index=vector_store, similarity_top_k=5)
 
     def sim_search(self, query):
-        return self.vector_store.similarity_search(query, k=3)
+        response = self.vector_store.retrieve(query)
+        return [i.get_content() for i in response]
 
 
 # def create_vector_store(docs, store_path: Optional[str] = None) -> FAISS:

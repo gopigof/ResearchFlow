@@ -9,18 +9,18 @@ class GraphEdges:
     def vector_search_decide_to_generate(self, state: GraphState):
         resources = state["resources"]
 
-        if len(resources) < 1 or state["paper_search"]:
-            return "generate"
+        if len(resources) < 1 or state.get("perform_paper_search", False):
+            return "irrelevant"
         else:
-            return "paper_search"
+            return "relevant"
 
     def paper_search_decide_to_generate(self, state: GraphState):
         resources = state["resources"]
 
-        if len(resources) < 1 or state["paper_search"]:
-            return "generate"
+        if len(resources) < 1 or state.get("perform_web_search", False):
+            return "irrelevant"
         else:
-            return "web_search"
+            return "relevant"
 
     def decide_to_generate(self, state):
         """

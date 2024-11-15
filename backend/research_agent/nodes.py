@@ -1,3 +1,5 @@
+from langchain_community.retrievers import ArxivRetriever
+from langchain_community.tools import TavilySearchResults
 from langchain_core.language_models import BaseChatModel
 from langchain_core.vectorstores import VectorStoreRetriever
 
@@ -13,15 +15,13 @@ logger = logging.getLogger(__name__)
 
 
 class GraphNodes:
-    def __init__(self, llm: BaseChatModel, retriever: Retriever, retrieval_grader, web_search_tool):
+    def __init__(self, llm: BaseChatModel, retriever: Retriever, retrieval_grader, web_search_tool: TavilySearchResults, paper_search_tool: ArxivRetriever):
         self.llm = llm
         self.retriever = retriever
         self.retrieval_grader = retrieval_grader
-        # self.hallucination_grader = hallucination_grader
-        # self.code_evaluator = code_evaluator
-        # self.question_rewriter = question_rewriter
         self.web_search_tool = web_search_tool
-        self.paper_search_tool = None
+        self.paper_search_tool = paper_search_tool
+
         self.generate_chain = create_generate_chain(llm)
 
     def vector_store_retrieve(self, state):
@@ -41,6 +41,7 @@ class GraphNodes:
         documents = self.retriever.sim_search(prompt)
         state["resources"] = documents
         state["steps"] = [Steps.VECTOR_STORE_RETRIEVAL.value]
+
         return state
 
     def generate(self, state):
@@ -55,10 +56,10 @@ class GraphNodes:
         """
         print("---GENERATE---")
         prompt = state["prompt"]
-        documents = state["resources"]
+        resources = state["resources"]
 
         # RAG generation
-        generation = self.generate_chain.invoke({"documents": '\n'.join(f"{index + 1}. {item}" for index, item in enumerate(documents)), "prompt": prompt})
+        generation = self.generate_chain.invoke({"resources": '\n\n'.join(f"{index + 1}. {item}" for index, item in enumerate(resources)), "prompt": prompt})
         state["generation"] = generation
         state["steps"].append(Steps.LLM_GENERATION.value)
         return state
@@ -66,7 +67,6 @@ class GraphNodes:
     def _base_grade_documents(self, state: GraphState, previous_state: str):
         prompt = state["prompt"]
         resources = state["resources"]
-        state["steps"].append(f"{previous_state}_grade_docs")
 
         filtered_resources = []
         next_search = False
@@ -75,6 +75,7 @@ class GraphNodes:
             score = self.retrieval_grader.invoke({
                 "prompt": prompt, "resources": resource
             })
+            # print(f"{resource} || {score}")
             if score["score"].lower() == "yes":
                 filtered_resources.append(resource)
             else:
@@ -84,12 +85,13 @@ class GraphNodes:
         if next_search:
             match previous_state:
                 case "vector_store":
-                    state["paper_search_performed"] = True
+                    state["perform_paper_search"] = True
                     state["steps"].append(Steps.VECTOR_STORE_EVALUATION.value)
                 case "paper_search":
-                    state["web_search_performed"] = True
+                    state["perform_web_search"] = True
                     state["steps"].append(Steps.PAPER_SEARCH_EVALUATION.value)
         state["resources"] = filtered_resources
+
         return state
 
     def grade_vector_store_documents(self, state: GraphState):
@@ -103,42 +105,19 @@ class GraphNodes:
         prompt = state["prompt"]
         web_results = self.web_search_tool.invoke({"query": prompt})
         state["resources"] = [
-            Document(page_content=result["content"], metadata={"url": result["url"]}) for result in web_results
+           result["content"] for result in web_results
         ]
-        state["steps"].append(Steps.WEB_SEARCH_RETRIEVAL)
+        state["steps"].append(Steps.WEB_SEARCH_RETRIEVAL.value)
         return state
 
     def paper_search(self, state: GraphState):
-        ...
-
-    def grade_documents(self, state):
-        """
-        Determines whether the retrieved documents are relevant to the question.
-
-        Args:
-            state (dict): The current graph state
-
-        Returns:
-            state (dict): Updates documents key with only filtered relevant documents
-        """
-        print("---CHECK DOCUMENT RELEVANCE TO PROMPT---")
         prompt = state["prompt"]
-        resources = state["resources"]
-
-        # score each doc
-        filtered_docs = []
-
-        for d in documents:
-            score = self.retrieval_grader.invoke({"input": prompt, "document": d.page_content})
-            grade = score["score"]
-            if grade == "yes":
-                print("---GRADE: DOCUMENT RELEVANT---")
-                filtered_docs.append(d)
-            else:
-                print("---GRADE: DOCUMENT IR-RELEVANT---")
-                continue
-
-        return {"documents": filtered_docs, "input": prompt}
+        arxiv_papers = self.paper_search_tool.invoke(prompt)
+        state["resources"] = [
+            paper.page_content for paper in arxiv_papers
+        ]
+        state["steps"].append(Steps.PAPER_SEARCH_RETRIEVAL.value)
+        return state
 
     def transform_query(self, state):
         """

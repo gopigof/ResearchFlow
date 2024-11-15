@@ -18,7 +18,7 @@ class GraderUtils:
             Return a binary score of "yes" if the document matches the user prompt and "no" if it does not match. Format the binary score in JSON with a single key "score" and no preamble or explanation.  
             
             Context:
-            Retrieved Document: {document}
+            Retrieved Document: {resources}
             User Prompt: {prompt}
             
             Question:
@@ -26,8 +26,8 @@ class GraderUtils:
             
             Answer:
             """,
-            input_variables=["document", "prompt"],
-        )
+            input_variables=["resources", "prompt"],
+    )
 
         # Create the retriever chain
         retriever_grader = grade_prompt | self.llm | JsonOutputParser()

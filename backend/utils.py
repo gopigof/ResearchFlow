@@ -4,6 +4,7 @@ from functools import lru_cache
 
 import boto3
 from botocore.exceptions import ClientError
+from langchain_community.retrievers import ArxivRetriever
 from langchain_community.tools import TavilySearchResults
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
@@ -84,3 +85,7 @@ def get_pinecone_vector_store():
 def get_tavily_web_search_tool():
     os.environ["TAVILY_API_KEY"] = settings.TAVILY_API_KEY
     return TavilySearchResults(max_results=5, search_depth="advanced", include_answer=True)
+
+
+def get_arxiv_search_tool():
+    return ArxivRetriever(load_max_docs=2, get_full_documents=False)

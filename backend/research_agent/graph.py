@@ -5,6 +5,10 @@ from typing_extensions import TypedDict
 from typing import List
 
 
+class GraphStep(TypedDict):
+    step_name: str
+
+
 class GraphState(TypedDict):
     """
     Represents the state of our graph.
@@ -21,8 +25,8 @@ class GraphState(TypedDict):
     generation: str
     resources: list
     steps: list[str]
-    web_search_performed: bool
-    paper_search_performed: bool
+    perform_web_search: bool
+    perform_paper_search: bool
 
 
 class Steps(StrEnum):
