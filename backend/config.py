@@ -24,6 +24,7 @@ class Settings(BaseSettings, extra="ignore"):
     POSTGRES_PASSWORD: str
     POSTGRES_PORT: int = 6543
     POSTGRES_DB: str
+    POSTGRES_URI: str | None = None
 
     # Pinecone
     PINECONE_API_KEY: str
@@ -51,6 +52,7 @@ class Settings(BaseSettings, extra="ignore"):
 
     @model_validator(mode="after")
     def validator(cls, values: "Settings") -> "Settings":
+        values.POSTGRES_URI = values.POSTGRES_CONN_STRING
         return values
 
 

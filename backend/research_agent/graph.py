@@ -27,6 +27,7 @@ class GraphState(TypedDict):
     steps: list[str]
     perform_web_search: bool
     perform_paper_search: bool
+    article_id: str
 
 
 class Steps(StrEnum):

@@ -2,6 +2,7 @@ from langchain_openai import OpenAIEmbeddings
 
 from llama_index.core import VectorStoreIndex
 from llama_index.core.indices.vector_store import VectorIndexRetriever
+from llama_index.core.vector_stores import MetadataFilters, MetadataFilter, FilterOperator
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from pinecone import Pinecone
 
@@ -19,10 +20,13 @@ def get_pinecone_vector_store():
 
 class Retriever:
     def __init__(self, vector_store):
-        self.vector_store = VectorIndexRetriever(index=vector_store, similarity_top_k=5)
+        self.vector_store = vector_store
+        # self.vector_store = VectorIndexRetriever(index=vector_store, similarity_top_k=5)
 
-    def sim_search(self, query):
-        response = self.vector_store.retrieve(query)
+    def sim_search(self, query, article_id):
+        retriever = VectorIndexRetriever(index=self.vector_store, similarity_top_k=5,
+                                         filters=MetadataFilters(filters=[MetadataFilter(key="doc_id", operator=FilterOperator.EQ, value=article_id)]))
+        response = retriever.retrieve(query)
         return [i.get_content() for i in response]
 
 

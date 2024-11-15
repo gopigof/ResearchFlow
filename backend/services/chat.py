@@ -5,9 +5,9 @@ async def process_qa_query(
     article_id: str, prompt: str, model: str, user_id: int
 ):
     """Process a Q/A query and store the result"""
-    response = agent_workflow.invoke({"prompt": prompt})
+    response = agent_workflow.invoke({"prompt": prompt, "article_id": article_id})
 
-    print(response)
+    print(response["steps"])
 
     # qa_history = QAHistory(
     #     id=uuid.uuid4().hex,
@@ -23,4 +23,8 @@ async def process_qa_query(
     #     session.add(qa_history)
     #     session.commit()
 
-    return response["generation"]
+    return {
+        "response": response["generation"],
+        "web_search": response.get("perform_web_search", False),
+        "paper_search": response.get("perform_paper_search", False),
+    }

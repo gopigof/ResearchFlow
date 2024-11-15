@@ -2,9 +2,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from frontend.pages.chat import qa_interface
-from frontend.pages.document_viewer import document_viewer_page
 from frontend.pages.list_docs import list_docs_page
-from frontend.pages.reports import generate_report_interface
 from frontend.pages.user_creation import create_user
 from frontend.pages.user_login import login
 from frontend.utils.chat import ensure_resource_dir_exists
@@ -79,14 +77,12 @@ def main():
         list_docs_page,
         title="Document List",
     )
-    doc_viewer_page = st.Page(document_viewer_page, title="Document Viewer")
-    generate_report_page = st.Page(generate_report_interface, title="Generate Reports")
 
     if st.session_state.logged_in:
         pg = st.navigation(
             {
-                "Document Selection": [docs_list_page, doc_viewer_page],
-                "Question Answering & Reports": [qa_page, generate_report_page],
+                "Document Selection": [docs_list_page],
+                "Question Answering & Reports": [qa_page],
                 "Logout": [logout_page],
             }
         )

@@ -36,9 +36,10 @@ class GraphNodes:
         """
         print("---RETRIEVE---")
         prompt = state["prompt"]
+        article_id = state["article_id"]
 
         # Retrieval
-        documents = self.retriever.sim_search(prompt)
+        documents = self.retriever.sim_search(prompt, article_id)
         state["resources"] = documents
         state["steps"] = [Steps.VECTOR_STORE_RETRIEVAL.value]
 

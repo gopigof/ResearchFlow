@@ -3,6 +3,8 @@ import io
 from fpdf import FPDF
 import streamlit as st
 from dotenv import load_dotenv
+
+from frontend.pages.list_docs import fetch_documents
 from frontend.utils.chat import fetch_file_from_s3
 from frontend.utils.auth import make_authenticated_request
 
@@ -10,7 +12,7 @@ load_dotenv()
 
 def display_pdf(pdf_file):
     base64_pdf = base64.b64encode(pdf_file.read()).decode("utf-8")
-    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
+    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="1400" height="800" type="application/pdf"></iframe>'
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 def convert_chat_to_markdown():
@@ -61,10 +63,22 @@ def qa_interface():
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
+    # Fetch documents from backend API
+    documents = fetch_documents()
+    selected_doc = None
+    if not documents:
+        st.write("No documents available.")
+        return
+
+    selected_doc_name = st.selectbox("Choose a document", [doc["filename"] for doc in documents])
+    if selected_doc_name:
+        if st.button(f"View {selected_doc_name}"):
+            selected_doc = next((doc for doc in documents if doc["filename"] == selected_doc_name), None)
+
     # Main interface
-    if 'selected_document' in st.session_state and st.session_state.selected_document:
-        doc = st.session_state.selected_document
-        st.subheader(f"Viewing: {doc['title']}")
+    if selected_doc:
+        doc = selected_doc
+        st.subheader(f"Viewing: {doc['filename']}")
 
         # Get OpenAI model choices
         openai_models_choice = st.selectbox(
@@ -74,7 +88,7 @@ def qa_interface():
         # Display PDF content preview
         st.subheader("PDF Content Preview")
         with st.spinner("Loading PDF"):
-            pdf_path = fetch_file_from_s3(doc["pdf_url"], None)
+            pdf_path = fetch_file_from_s3(doc["sourcepdf_url"], None)
             with open(pdf_path, "rb") as f:
                 content = f.read()
             display_pdf(io.BytesIO(content))
@@ -117,8 +131,9 @@ def qa_interface():
             st.markdown(download_pdf(), unsafe_allow_html=True)
 
     else:
+        st.divider()
         st.warning(
-            "No article selected. Please upload a PDF file before asking questions."
+            "\t\t\t" + "Select a PDF to start asking questions!"
         )
 
 if __name__ == "__main__":

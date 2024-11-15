@@ -21,9 +21,6 @@ async def question_answer(
     """
     Process a Q/A query for a specific article using multi-modal RAG
     """
-    return {
-        "response": await process_qa_query(
+    return await process_qa_query(
             article_id, request.question, request.model, 1
         )
-    }
-

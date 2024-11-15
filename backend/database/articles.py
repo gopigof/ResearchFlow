@@ -1,5 +1,4 @@
-# articles/models.py
-from sqlalchemy import Column, String, DateTime, Computed
+from sqlalchemy import Column, String, DateTime, Computed, Text, func
 
 from backend.database import Base
 
@@ -7,14 +6,10 @@ from backend.database import Base
 class ArticleModel(Base):
     __tablename__ = "articles"
 
+    filename = Column(String, primary_key=True)
+    sourcepdf_url = Column(Text)
+    processeds3_url = Column(Text)
     a_id = Column("a_id", String, primary_key=True, nullable=False)
-    # title = Column(String(500), nullable=False)
-    # description = Column(String(1000), nullable=False)
-    # publication_date = Column(DateTime, nullable=False)
-    # authors = Column(String(500), nullable=False)
-    pdf_url = Column(String(500), nullable=False)
-    # image_url = Column(String(500), nullable=False)
-    created_at = Column(DateTime, Computed("CURRENT_TIMESTAMP()"), nullable=False)
-    updated_at = Column(DateTime, Computed("CURRENT_TIMESTAMP()"), nullable=False)
+    created_date = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = {"schema": "public"}

@@ -139,6 +139,7 @@ def fetch_file_from_s3(key: str, dest_filename: str | None):
         if not dest_filename
         else f"{dest_filename}{os.path.splitext(key)[1]}"
     )
+    key = "/".join(key.split("/")[-3:])
     local_filepath = os.path.join(CACHED_RESOURCES_PATH, filename)
     # Check locally before downloading
     if os.path.exists(local_filepath):
