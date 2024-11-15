@@ -54,7 +54,7 @@ class S3Downloader:
             print(f"Error listing files from S3: {str(e)}")
             raise
 
-    def download_pdfs(self, limit=1):
+    def download_pdfs(self, limit=3):
         """
         Download up to 3 PDF files from the S3 bucket and store their info in the database
         
