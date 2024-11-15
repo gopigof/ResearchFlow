@@ -117,80 +117,75 @@ Contribution:
 ├── README.md
 ├── app.py
 ├── architecture
-├── 1_Z1NtI1D-YEGBJfb7bW4MIA.png
-├── assignment_4_architecture.png
-├── docling.jpg
-├── generate_diagrams.py
-├── pinecone-1.png
-└── streamlit-logo-primary-colormark-darktext.png
+│   ├── assignment_4_architecture.png
+│   ├── generate_diagrams.py
 ├── backend
-├── __init__.py
-├── config.py
-├── database
-├── __init__.py
-├── articles.py
-└── users.py
-├── logging.conf
-├── main.py
-├── research_agent
-├── __init__.py
-├── edges.py
-├── generate_chain.py
-├── grader.py
-├── graph.py
-├── nodes.py
-└── vector_store.py
-├── schemas
-├── __init__.py
-├── articles.py
-├── auth.py
-├── chat.py
-└── users.py
-├── server.py
-├── services
-├── __init__.py
-├── articles.py
-├── auth.py
-├── auth_bearer.py
-├── chat.py
-└── users.py
-├── utils.py
-└── views
-    ├── __init__.py
-    ├── articles.py
-    ├── auth.py
-    ├── chat.py
-    └── users.py
+│   ├── __init__.py
+│   ├── config.py
+│   ├── database
+│   │   ├── __init__.py
+│   │   ├── articles.py
+│   │   └── users.py
+│   ├── logging.conf
+│   ├── main.py
+│   ├── research_agent
+│   │   ├── __init__.py
+│   │   ├── edges.py
+│   │   ├── generate_chain.py
+│   │   ├── grader.py
+│   │   ├── graph.py
+│   │   ├── nodes.py
+│   │   └── vector_store.py
+│   ├── schemas
+│   │   ├── __init__.py
+│   │   ├── articles.py
+│   │   ├── auth.py
+│   │   ├── chat.py
+│   │   └── users.py
+│   ├── server.py
+│   ├── services
+│   │   ├── __init__.py
+│   │   ├── articles.py
+│   │   ├── auth.py
+│   │   ├── auth_bearer.py
+│   │   ├── chat.py
+│   │   └── users.py
+│   ├── utils.py
+│   └── views
+│       ├── __init__.py
+│       ├── articles.py
+│       ├── auth.py
+│       ├── chat.py
+│       └── users.py
 ├── backend.Dockerfile
 ├── config
 ├── dags
-├── articles.py
-├── downloaded_pdfs
-├── 10-years-after-global-financial-crisis.pdf
-├── 2023-international-valuation-guide-to-cost-of-capital.pdf
-└── Horan-ESG_RF_Brief_2022_Online.pdf
-├── pdf_download.py
-├── pdf_processor_indexer.py
-└── pipeline.py
+│   ├── articles.py
+│   ├── downloaded_pdfs
+│   ├── pdf_download.py
+│   ├── pdf_processor_indexer.py
+│   └── pipeline.py
+├── docker-compose-airflow.yaml
 ├── docker-compose-app.yml
-├── docker-compose.yaml
 ├── frontend
-├── __init__.py
-├── config.py
-├── pages
-├── __init__.py
-├── chat.py
-├── list_docs.py
-├── user_creation.py
-└── user_login.py
-└── utils
-    ├── __init__.py
-    ├── api_utils.py
-    ├── auth.py
-    └── chat.py
+│   ├── __init__.py
+│   ├── config.py
+│   ├── pages
+│   │   ├── __init__.py
+│   │   ├── chat.py
+│   │   ├── list_docs.py
+│   │   ├── user_creation.py
+│   │   └── user_login.py
+│   └── utils
+│       ├── __init__.py
+│       ├── api_utils.py
+│       ├── auth.py
+│       └── chat.py
 ├── frontend.Dockerfile
 ├── graph.png
 ├── poetry.lock
-└── pyproject.toml
+├── pyproject.toml
+└── video
+    └── video.mov
 
 ```
