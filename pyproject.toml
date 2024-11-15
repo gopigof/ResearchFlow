@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "assignment3"
+name = "assignment4"
 version = "0.1.0"
 description = ""
 authors = ["Gopi Krishna <gopigof@gmail.com>"]
@@ -8,8 +8,19 @@ package-mode = false
 
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.12,<3.13"
 langgraph = "^0.2.45"
+boto3 = "^1.35.57"
+python-dotenv = "^1.0.1"
+llama-index-core = "^0.11.22"
+llama-index-readers-docling = "^0.2.1"
+llama-index-node-parser-docling = "^0.2.0"
+llama-index-embeddings-huggingface = "^0.3.1"
+llama-index-llms-huggingface-api = "^0.2.0"
+llama-index-readers-file = "^0.3.0"
+llama-index-vector-stores-pinecone = "^0.3.1"
+llama-index-embeddings-openai = "^0.2.5"
+psycopg2 = "^2.9.10"
 
 
 [build-system]
