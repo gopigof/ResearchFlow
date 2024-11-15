@@ -3,8 +3,6 @@ import io
 from fpdf import FPDF
 import streamlit as st
 from dotenv import load_dotenv
-
-from frontend.pages.list_docs import fetch_documents
 from frontend.utils.chat import fetch_file_from_s3
 from frontend.utils.auth import make_authenticated_request
 import base64
@@ -96,7 +94,7 @@ def convert_chat_to_markdown():
 
     if 'selected_document' in st.session_state:
         doc = st.session_state.selected_document
-        markdown_content += f"Document: {doc['title']}\n\n"
+        markdown_content += f"Document: {doc['filename']}\n\n"
 
     for message in st.session_state.chat_history:
         role = message["role"].capitalize()
@@ -120,27 +118,10 @@ def qa_interface():
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
 
-    # Fetch documents from backend API
-    documents = fetch_documents()
-    selected_doc = None
-    if not documents:
-        st.write("No documents available.")
-        return
-
-    selected_doc_name = st.selectbox("Choose a document", [doc["filename"] for doc in documents])
-    if selected_doc_name:
-        if st.button(f"View {selected_doc_name}"):
-            selected_doc = next((doc for doc in documents if doc["filename"] == selected_doc_name), None)
-
     # Main interface
-    if selected_doc:
-        doc = selected_doc
+    if 'selected_document' in st.session_state and st.session_state.selected_document:
+        doc = st.session_state.selected_document
         st.subheader(f"Analyzing: {doc['filename']}")
-
-        # Get OpenAI model choices
-        openai_models_choice = st.selectbox(
-            "Choose an OpenAI model", ["gpt-4o", "gpt-4o-mini", "gpt-3.5"]
-        )
 
         # Document preview at the top
         with st.expander("Document Preview", expanded=False):
@@ -175,11 +156,13 @@ def qa_interface():
                     response = make_authenticated_request(
                         f"/chat/{doc['a_id']}/qa",
                         "POST",
-                        {"question": prompt}
+                        {"question": prompt, "model": ""}
                     )
 
                     with st.chat_message("assistant"):
                         st.markdown(response["response"])
+
+                    print(response)
 
                     st.session_state.chat_history.append({
                         "role": "assistant",
@@ -213,7 +196,6 @@ def qa_interface():
                     )
 
     else:
-        st.divider()
         st.warning("Please select a document to begin your research.")
 
 if __name__ == "__main__":

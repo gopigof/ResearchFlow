@@ -3,6 +3,7 @@ import os
 from functools import lru_cache
 
 import boto3
+import requests
 import streamlit as st
 from botocore.exceptions import ClientError
 
@@ -165,3 +166,13 @@ def _ensure_directory_exists(directory):
 def ensure_resource_dir_exists():
     _ensure_directory_exists(os.path.join(CACHED_RESOURCES_PATH, "pdfs"))
     _ensure_directory_exists(os.path.join(CACHED_RESOURCES_PATH, "images"))
+
+def fetch_documents():
+    """Fetch all documents from the backend API."""
+    try:
+        response = make_authenticated_request("/articles/", "GET")
+
+        return response
+    except requests.exceptions.RequestException as e:
+        st.error("Failed to load documents from the server.")
+        return []

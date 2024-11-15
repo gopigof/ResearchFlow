@@ -77,40 +77,10 @@ def list_docs_page():
         st.write("No documents available.")
         return
 
-    view_option = st.radio(
-        "Select Document Exploration Mode",
-        ("Dropdown View", "Grid View"),
-        horizontal=True,
-    )
-
-    if view_option == "Dropdown View":
-        selected_doc_name = st.selectbox("Choose a document", [doc["title"] for doc in documents])
-        if selected_doc_name:
-            if st.button(f"View {selected_doc_name}"):
-                selected_doc = next((doc for doc in documents if doc["title"] == selected_doc_name), None)
-                if selected_doc:
-                    st.session_state.selected_document = selected_doc
-                    st.session_state.current_view = "document_viewer"
-                    st.rerun()
-
-    elif view_option == "Grid View":
-        cols = st.columns(3)
-        for idx, doc in enumerate(documents):
-            with cols[idx % 3]:
-                # Get the image URL from the document
-                image_key = doc.get("image_url")  # Corrected from image_uri to image_url
-                if image_key:  # Check if image_key exists
-                    image_file = fetch_file_from_s3(image_key, None)
-                    with open(image_file, "rb") as fp:
-                        img_base64 = base64.b64encode(fp.read()).decode("utf-8")
-
-                    st.image(f"data:image/png;base64,{img_base64}", use_column_width=True)
-                else:
-                    st.write("Image URL not available.")  # Notify if there's no URL
-
-                st.write(doc["title"])
-
-                if st.button(f"View {doc['title']}", key=f"view_{idx}"):
-                    st.session_state.selected_document = doc
-                    st.session_state.current_view = "document_viewer"
-                    st.rerun()
+    selected_doc_name = st.selectbox("Choose a document", [doc["filename"] for doc in documents])
+    if selected_doc_name:
+        if st.button(f"View {selected_doc_name}"):
+            selected_doc = next((doc for doc in documents if doc["filename"] == selected_doc_name), None)
+            if selected_doc:
+                st.session_state.selected_document = selected_doc
+                st.rerun()

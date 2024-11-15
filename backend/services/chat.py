@@ -22,9 +22,13 @@ async def process_qa_query(
     # with db_session() as session:
     #     session.add(qa_history)
     #     session.commit()
+    tools_used = ["vector_search"]
+    if response.get("perform_web_search", False):
+        tools_used.append("web_search")
+    if response.get("paper_search", False):
+        tools_used.append("paper_search")
 
     return {
-        "response": response["generation"],
-        "web_search": response.get("perform_web_search", False),
-        "paper_search": response.get("perform_paper_search", False),
+        "response": response["generation"] + f"\n\n### Tools used to generate response:\n\t{', '.join(tools_used)}",
+        "tools_used": ", ".join(tools_used),
     }
