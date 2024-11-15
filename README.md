@@ -1,13 +1,11 @@
-Here's a README.md format based on the provided assignment details:
-
 # Multi-Agent Research Tool with Langraph and Airflow
 
 ## Links
 
-- [Deployed Application](https://your-app-url.com)
-- [Backend Services](https://your-backend-url.com)
-- [Demo Video](https://your-video-url.com)
-- [Codelab Documentation](https://your-codelab-url.com)
+- [Codelab Documentation](https://codelabs-preview.appspot.com/?file_id=1t6ou-QbbPWOR-Mek-LS3PN6pOFQiU-TcNmU0s33pc3c#0)
+- [Deployed Streamlit Application](http://54.166.164.60:8501)
+- [Deployed FastAPI Backend](http://54.166.164.60:8000/docs)
+- [Demo Video](video/video.mov)
 
 ## Objective
 
@@ -64,12 +62,12 @@ This project aims to build an end-to-end research tool using an Airflow pipeline
 
 1. Clone the repository:
    ```
-   git clone repo link
+   git clone https://github.com/BigDataIA-Fall2024-TeamA2/Assignment4
    ```
 
 2. Install dependencies:
    ```
-   poetry install
+   poetry install --dev
    ```
 
 3. Set up environment variables:
@@ -101,20 +99,15 @@ This project aims to build an end-to-end research tool using an Airflow pipeline
 
 For detailed instructions on setup, usage, and accessing the deployed applications, please refer to our comprehensive [User Guide](docs/user_guide.md).
 
-## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+## Attestation
+WE ATTEST THAT WE HAVEN’T USED ANY OTHER STUDENTS’ WORK IN OUR ASSIGNMENT AND ABIDE BY THE POLICIES LISTED IN THE STUDENT HANDBOOK
 
-## License
+Contribution:
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
-## Acknowledgments
-
-- Docling for document parsing
-- Pinecone for vector storage and retrieval
-- Langraph for multi-agent system implementation
-- Airflow for pipeline automation
+    a. Gopi Krishna Gorle: 33%
+    b. Pranali Chipkar: 33%
+    c. Mubin Modi: 33%
 
 
 ## Project Structure
@@ -122,25 +115,82 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ```
 .
 ├── README.md
-├── airflow/
-│   ├── dags/
-│   │   ├── document_parsing.py
-│   │   └── vector_storage.py
-│   └── Dockerfile
-├── agents/
-│   ├── document_selection.py
-│   ├── arxiv_agent.py
-│   ├── web_search_agent.py
-│   └── rag_agent.py
-├── frontend/
-│   ├── app.py
-│   └── pages/
-├── backend/
-│   ├── api/
-│   └── services/
-├── utils/
-│   ├── docling_utils.py
-│   └── pinecone_utils.py
-├── docker-compose.yml
-└── requirements.txt
+├── app.py
+├── architecture
+├── 1_Z1NtI1D-YEGBJfb7bW4MIA.png
+├── assignment_4_architecture.png
+├── docling.jpg
+├── generate_diagrams.py
+├── pinecone-1.png
+└── streamlit-logo-primary-colormark-darktext.png
+├── backend
+├── __init__.py
+├── config.py
+├── database
+├── __init__.py
+├── articles.py
+└── users.py
+├── logging.conf
+├── main.py
+├── research_agent
+├── __init__.py
+├── edges.py
+├── generate_chain.py
+├── grader.py
+├── graph.py
+├── nodes.py
+└── vector_store.py
+├── schemas
+├── __init__.py
+├── articles.py
+├── auth.py
+├── chat.py
+└── users.py
+├── server.py
+├── services
+├── __init__.py
+├── articles.py
+├── auth.py
+├── auth_bearer.py
+├── chat.py
+└── users.py
+├── utils.py
+└── views
+    ├── __init__.py
+    ├── articles.py
+    ├── auth.py
+    ├── chat.py
+    └── users.py
+├── backend.Dockerfile
+├── config
+├── dags
+├── articles.py
+├── downloaded_pdfs
+├── 10-years-after-global-financial-crisis.pdf
+├── 2023-international-valuation-guide-to-cost-of-capital.pdf
+└── Horan-ESG_RF_Brief_2022_Online.pdf
+├── pdf_download.py
+├── pdf_processor_indexer.py
+└── pipeline.py
+├── docker-compose-app.yml
+├── docker-compose.yaml
+├── frontend
+├── __init__.py
+├── config.py
+├── pages
+├── __init__.py
+├── chat.py
+├── list_docs.py
+├── user_creation.py
+└── user_login.py
+└── utils
+    ├── __init__.py
+    ├── api_utils.py
+    ├── auth.py
+    └── chat.py
+├── frontend.Dockerfile
+├── graph.png
+├── poetry.lock
+└── pyproject.toml
+
 ```

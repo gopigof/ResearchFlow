@@ -19,7 +19,7 @@ COPY poetry.lock /app/poetry.lock
 
 # Install the dependencies specified in pyproject.toml using Poetry
 RUN poetry config virtualenvs.create false \
-    && poetry install
+    && poetry install --without dev
 
 # Copy the current directory contents into the container at /app
 COPY backend /app/backend
