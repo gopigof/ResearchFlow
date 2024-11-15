@@ -10,7 +10,7 @@ from backend.config import settings
 from backend.database import db_session
 from backend.database.users import UserModel
 from backend.schemas.auth import Token
-from backend.utilities.base_utils import verify_password
+from backend.utils import verify_password
 
 
 async def authenticate_user(username: str, password: str) -> Optional[UserModel]:
