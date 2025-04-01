@@ -1,4 +1,4 @@
-# Multi-Agent Research Tool with Langraph and Airflow
+# ResearchFlow: Multi-Agent Document Intelligence
 
 ## Links
 
@@ -9,7 +9,7 @@
 
 ## Objective
 
-This project aims to build an end-to-end research tool using an Airflow pipeline to process documents, store and search vectors, and create a multi-agent research interface.
+Research Flow is a Multi-Agent Research Tool with Langraph and Airflow that aims to build an end-to-end research tool using an Airflow pipeline to process documents, store and search vectors, and create a multi-agent research interface.
 
 ## Features
 
